@@ -1,4 +1,4 @@
-package logadapterzerolog
+package logadapter
 
 import (
 	"fmt"
