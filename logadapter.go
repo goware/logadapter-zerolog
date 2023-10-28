@@ -18,6 +18,10 @@ type logAdapter struct {
 
 var _ logger.Logger = &logAdapter{}
 
+func (s *logAdapter) With(args ...interface{}) logger.Logger {
+	return &logAdapter{s.log.With().Fields(args).Logger()}
+}
+
 func (s *logAdapter) Debug(v ...interface{}) {
 	s.log.Debug().Msg(fmt.Sprint(v...))
 }
