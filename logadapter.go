@@ -24,8 +24,8 @@ func (s *logAdapter) With(args ...interface{}) logger.Logger {
 }
 
 func (s *logAdapter) Debug(v ...interface{}) {
-	msg, args := withArgs(v...)
-	addArgs(s.log.Debug(), args).Msg(msg)
+	msg, args := getArgs(v...)
+	withArgs(s.log.Debug(), args).Msg(msg)
 }
 
 func (s *logAdapter) Debugf(format string, v ...interface{}) {
@@ -33,8 +33,8 @@ func (s *logAdapter) Debugf(format string, v ...interface{}) {
 }
 
 func (s *logAdapter) Info(v ...interface{}) {
-	msg, args := withArgs(v...)
-	addArgs(s.log.Info(), args).Msg(msg)
+	msg, args := getArgs(v...)
+	withArgs(s.log.Info(), args).Msg(msg)
 }
 
 func (s *logAdapter) Infof(format string, v ...interface{}) {
@@ -42,8 +42,8 @@ func (s *logAdapter) Infof(format string, v ...interface{}) {
 }
 
 func (s *logAdapter) Warn(v ...interface{}) {
-	msg, args := withArgs(v...)
-	addArgs(s.log.Warn(), args).Msg(msg)
+	msg, args := getArgs(v...)
+	withArgs(s.log.Warn(), args).Msg(msg)
 }
 
 func (s *logAdapter) Warnf(format string, v ...interface{}) {
@@ -51,8 +51,8 @@ func (s *logAdapter) Warnf(format string, v ...interface{}) {
 }
 
 func (s *logAdapter) Error(v ...interface{}) {
-	msg, args := withArgs(v...)
-	addArgs(s.log.Error(), args).Msg(msg)
+	msg, args := getArgs(v...)
+	withArgs(s.log.Error(), args).Msg(msg)
 	s.log.Error().Msg(fmt.Sprint(v...))
 }
 
@@ -61,8 +61,8 @@ func (s *logAdapter) Errorf(format string, v ...interface{}) {
 }
 
 func (s *logAdapter) Fatal(v ...interface{}) {
-	msg, args := withArgs(v...)
-	addArgs(s.log.Fatal(), args).Msg(msg)
+	msg, args := getArgs(v...)
+	withArgs(s.log.Fatal(), args).Msg(msg)
 	os.Exit(1)
 }
 
@@ -83,8 +83,8 @@ func (s *logAdapter) Printf(format string, v ...interface{}) {
 	s.log.Info().Msg(fmt.Sprintf(format, v...))
 }
 
-// withArgs returns the message and arguments from the variadic arguments.
-func withArgs(v ...interface{}) (string, []slog.Attr) {
+// getArgs returns the message and arguments from the variadic arguments.
+func getArgs(v ...interface{}) (string, []slog.Attr) {
 	if len(v) == 0 {
 		return "", nil
 	}
@@ -108,7 +108,7 @@ func withArgs(v ...interface{}) (string, []slog.Attr) {
 	return msg, args
 }
 
-func addArgs(logger *zerolog.Event, args []slog.Attr) *zerolog.Event {
+func withArgs(logger *zerolog.Event, args []slog.Attr) *zerolog.Event {
 	for _, args := range args {
 		var value interface{}
 		switch t := args.Value.Kind(); t {
