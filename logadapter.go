@@ -53,7 +53,6 @@ func (s *logAdapter) Warnf(format string, v ...interface{}) {
 func (s *logAdapter) Error(v ...interface{}) {
 	msg, args := getArgs(v...)
 	withArgs(s.log.Error(), args).Msg(msg)
-	s.log.Error().Msg(fmt.Sprint(v...))
 }
 
 func (s *logAdapter) Errorf(format string, v ...interface{}) {
